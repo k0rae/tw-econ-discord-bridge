@@ -17,7 +17,7 @@ discord.once(Events.ClientReady, c => {
 
 discord.on(Events.MessageCreate, msg => {
     if(msg.author.bot || msg.channel !== discordChannel || !msg.content) return;
-    econ.say(`${msg.author.username}: ${msg.content}`);
+    econ.say(`[D] ${msg.author.username}: ${msg.content}`);
 })
 econ.on('online', e => {
     console.log('Connected to econ');
