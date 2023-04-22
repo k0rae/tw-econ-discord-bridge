@@ -8,7 +8,6 @@ const econ = new TeeworldsEcon(process.env.HOST, process.env.PORT, process.env.P
 let discordChannel = null;
 let discordReady = false, econReady = false;
 
-const msgs = process.env.SPAM_MSG.split('\n');
 discord.once(Events.ClientReady, c => {
     console.log('Discord bot logged in.');
     if(econReady) onReady();
@@ -23,23 +22,11 @@ econ.on('online', e => {
     console.log('Connected to econ');
     if(discordReady) onReady();
     econReady = true;
-    if(process.env.SPAM_INTERVAL !== '') {
-        setInterval(async () => {
-            const res = await econ.exec("status");
-            console.log(res);
-            msgs.forEach(msg => econ.say(msg));
-        }, 1000  * parseInt(process.env.SPAM_INTERVAL));
-    }
 })
 
 econ.on('chat', e => {
     console.log(`${e.player}: ${e.message}`)
     const sender = e.player ? e.player : "[Server]";
-    let includes = false
-    msgs.forEach(msg => {
-        if(e.message.includes(msg)) includes = true;
-    })
-    if(includes) return;
     if(discordChannel) {
         discordChannel.send(`${sender}: ${e.message}`);
     }
